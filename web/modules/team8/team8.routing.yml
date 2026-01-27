@@ -1,0 +1,9 @@
+entity.canvas_page.clone_page:
+  path: admin/content/pages/existing
+  defaults:
+    _title: 'Clone Page'
+  requirements:
+    _permission: 'clone canvas page'
+
+
+

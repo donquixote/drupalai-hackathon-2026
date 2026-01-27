@@ -1,0 +1,5 @@
+entity.canvas_page.clone_page:
+  route_name: entity.canvas_page.clone_page
+  title: 'Clone Page'
+  appears_on:
+    - entity.canvas_page.collection
