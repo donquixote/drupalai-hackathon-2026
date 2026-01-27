@@ -1,0 +1,15 @@
+version: '3.6'
+
+services:
+  gotenberg:
+    image: gotenberg/gotenberg:8
+    container_name: ddev-${DDEV_SITENAME}-gotenberg
+    restart: unless-stopped
+    command:
+      - gotenberg
+      - --chromium-disable-javascript=false
+    expose:
+      - "3000"
+    labels:
+      com.ddev.site-name: ${DDEV_SITENAME}
+      com.ddev.approot: $DDEV_APPROOT
