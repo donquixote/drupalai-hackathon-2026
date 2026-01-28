@@ -4,3 +4,90 @@
  * @file
  * Primary module hooks for team8 module.
  */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\File\FileSystemInterface;
+use Gotenberg\Gotenberg;
+
+/**
+ * Implements hook_entity_insert().
+ */
+function team8_entity_insert(EntityInterface $entity) {
+  _team8_canvas_page_post_save($entity);
+}
+
+/**
+ * Implements hook_entity_update().
+ */
+function team8_entity_update(EntityInterface $entity) {
+  _team8_canvas_page_post_save($entity);
+}
+
+
+function _team8_canvas_page_post_save(EntityInterface $entity): void {
+
+  // Only act on canvas_page entities.
+//  if ($entity->getEntityTypeId() !== 'canvas_page') {
+//    return;
+//  }
+
+  // Prevent infinite loops when re-saving the entity.
+  if (!empty($entity->_team8_preview_generated)) {
+    return;
+  }
+
+  // Example HTML source – replace with your real canvas HTML.
+  $html = '<html><body><h1>Canvas Preview</h1></body></html>';
+  $url = 'https://www.google.com';
+
+  // Call Gotenberg and generate an image.
+  $response = Gotenberg::chromium('http://gotenberg:3000')
+    ->screenshot()
+    ->url($url);
+
+  $binary = $response->getBody()->getContents();
+
+  if (empty($binary)) {
+    return;
+  }
+
+  $file_system = \Drupal::service('file_system');
+  $file_repository = \Drupal::service('file.repository');
+
+  $directory = 'public://canvas_page_previews';
+  $file_system->prepareDirectory(
+    $directory,
+    FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS
+  );
+
+  $filename = sprintf(
+    'canvas_page_preview_%d_%d.png',
+    $entity->id(),
+    \Drupal::time()->getRequestTime()
+  );
+
+  $destination = $directory . '/' . $filename;
+
+  // Write image returned by Gotenberg.
+  $file = $file_repository->writeData(
+    $binary,
+    $destination,
+    FileSystemInterface::EXISTS_REPLACE
+  );
+
+  $file->setPermanent();
+  $file->save();
+
+  // Attach to preview_image field.
+  if ($entity->hasField('preview_image')) {
+    $entity->_team8_preview_generated = TRUE;
+
+    $entity->set('preview_image', [
+      'target_id' => $file->id(),
+      'alt' => 'Canvas preview',
+      'title' => 'Canvas preview',
+    ]);
+
+    $entity->save();
+  }
+}

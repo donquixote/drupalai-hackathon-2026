@@ -39,7 +39,8 @@
         "drupal/drupal_cms_starter": "^2",
         "drupal/mercury": "@beta",
         "drupal/recipe_installer_kit": "^1",
-        "drupal/webform": "@beta"
+        "drupal/webform": "@beta",
+        "gotenberg/gotenberg-php": "^2.16"
     },
     "require-dev": {
         "drush/drush": "^13.6.1"
