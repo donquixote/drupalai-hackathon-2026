@@ -12,7 +12,7 @@ use Drupal\Core\Hook\Attribute\Hook;
 class CanvasPageEntityType {
 
   /**
-   * Implements hook_entity_base_field_info_alter().
+   * Implements hook_entity_base_field_info().
    */
   #[Hook('entity_base_field_info')]
   public function entityTypeAlter(EntityTypeInterface $entity_type) {
@@ -39,7 +39,7 @@ class CanvasPageEntityType {
       // Display settings
       ->setDisplayOptions('form', [
         'type' => 'image_image',
-        'weight' => 10,
+        'weight' => 555,
         'settings' => [
           'progress_indicator' => 'throbber',
           'preview_image_style' => 'thumbnail',
