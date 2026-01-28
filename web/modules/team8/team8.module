@@ -13,14 +13,14 @@ use Gotenberg\Gotenberg;
  * Implements hook_entity_insert().
  */
 function team8_entity_insert(EntityInterface $entity) {
-  _team8_canvas_page_post_save($entity);
+//  _team8_canvas_page_post_save($entity);
 }
 
 /**
  * Implements hook_entity_update().
  */
 function team8_entity_update(EntityInterface $entity) {
-  _team8_canvas_page_post_save($entity);
+//  _team8_canvas_page_post_save($entity);
 }
 
 
@@ -79,15 +79,4 @@ function _team8_canvas_page_post_save(EntityInterface $entity): void {
   $file->save();
 
   // Attach to preview_image field.
-  if ($entity->hasField('preview_image')) {
-    $entity->_team8_preview_generated = TRUE;
-
-    $entity->set('preview_image', [
-      'target_id' => $file->id(),
-      'alt' => 'Canvas preview',
-      'title' => 'Canvas preview',
-    ]);
-
-    $entity->save();
-  }
 }
