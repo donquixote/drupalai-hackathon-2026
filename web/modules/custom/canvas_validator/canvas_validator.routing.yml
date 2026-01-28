@@ -1,0 +1,9 @@
+canvas_validator.settings_form:
+  path: '/admin/config/canvas-validator'
+  defaults:
+    _form: '\Drupal\canvas_validator\Form\CanvasValidatorSettingsForm'
+    _title: 'Canvas AI Validator'
+  requirements:
+    _permission: 'administer site configuration'
+  options:
+    _admin_route: TRUE

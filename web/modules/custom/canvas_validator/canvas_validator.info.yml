@@ -1,8 +1,10 @@
-name: Canvas Validator
+name: Canvas AI Validator
 type: module
-description: 'AI-assisted accessibility validation for Canvas pages before publish.'
+description: 'AI-assisted accessibility validation for Canvas pages before publishing.'
 core_version_requirement: ^11
 package: Custom
 dependencies:
   - ai:ai
   - canvas:canvas
+
+configure: canvas_validator.settings_form

@@ -79,27 +79,34 @@ final class CanvasAccessibilityConstraintValidator extends ConstraintValidator i
       }
     }
     if ($option === '') {
-      $this->loggerFactory->get('canvas_validator')->error('Canvas validator failed: no provider/model configured.');
-      $this->context->buildViolation('Wait! AI provider is not configured for Canvas Validator.')->addViolation();
+      $this->loggerFactory->get('canvas_validator')->error('Canvas AI validator failed: no provider/model configured.');
+      $this->context->buildViolation('Wait! AI provider is not configured for Canvas AI Validator.')->addViolation();
       return;
     }
 
     $provider = $this->aiProviderManager->loadProviderFromSimpleOption($option);
     $model_id = $this->aiProviderManager->getModelNameFromSimpleOption($option);
     if (!$provider || $model_id === '' || !$provider->isUsable('chat')) {
-      $this->loggerFactory->get('canvas_validator')->error('Canvas validator failed: provider not usable. Option: {option}, Model: {model}.', [
+      $this->loggerFactory->get('canvas_validator')->error('Canvas AI validator failed: provider not usable. Option: {option}, Model: {model}.', [
         'option' => $option,
         'model' => $model_id,
       ]);
-      $this->context->buildViolation('Wait! AI provider is not usable for Canvas Validator.')->addViolation();
+      $this->context->buildViolation('Wait! AI provider is not usable for Canvas AI Validator.')->addViolation();
       return;
     }
 
     $snippet = substr($rendered_content, 0, 4000);
-    $prompt = "You are an accessibility validator. Check the HTML for: multiple H1 headings, Headings follow a logical hierarchy (h1 > h2 > h3, no skipping), images missing alt text, and links with empty text.\n"
-      . "Return exactly 'TRUE' if no issues.\n"
-      . "Otherwise return one short sentence starting with 'Wait!' describing the every issue, giving a recommendation about how to fix each issue.\n\n"
-      . "CONTENT:\n" . $snippet;
+    $prompt_template = trim((string) ($this->configFactory->get('canvas_validator.settings')->get('prompt') ?? ''));
+    if ($prompt_template === '') {
+      $this->context->buildViolation('Wait! Validation prompt is empty.')->addViolation();
+      return;
+    }
+    if (str_contains($prompt_template, '{{content}}')) {
+      $prompt = str_replace('{{content}}', $snippet, $prompt_template);
+    }
+    else {
+      $prompt = $prompt_template . "\n\nCONTENT:\n" . $snippet;
+    }
 
     try {
       $input = new ChatInput([
@@ -117,7 +124,7 @@ final class CanvasAccessibilityConstraintValidator extends ConstraintValidator i
       }
     }
     catch (\Throwable $e) {
-      $this->loggerFactory->get('canvas_validator')->error('Canvas validator exception: {message}', [
+      $this->loggerFactory->get('canvas_validator')->error('Canvas AI validator exception: {message}', [
         'message' => $e->getMessage(),
       ]);
     }
