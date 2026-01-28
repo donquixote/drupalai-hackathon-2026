@@ -1,0 +1,7 @@
+canvas_validator.settings:
+  type: config_object
+  label: 'Canvas Validator settings'
+  mapping:
+    provider_model:
+      type: string
+      label: 'AI provider/model option for chat'

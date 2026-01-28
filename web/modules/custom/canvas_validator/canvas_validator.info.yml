@@ -1,0 +1,8 @@
+name: Canvas Validator
+type: module
+description: 'AI-assisted accessibility validation for Canvas pages before publish.'
+core_version_requirement: ^11
+package: Custom
+dependencies:
+  - ai:ai
+  - canvas:canvas

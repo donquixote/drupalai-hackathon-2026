@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Hooks for canvas_validator.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Entity\EntityTypeInterface;
+
+/**
+ * Implements hook_entity_base_field_info_alter().
+ */
+function canvas_validator_entity_base_field_info_alter(array &$fields, EntityTypeInterface $entity_type): void {
+  if ($entity_type->id() !== 'canvas_page') {
+    return;
+  }
+
+  if (isset($fields['components'])) {
+    $fields['components']->addConstraint('CanvasAccessibilityConstraint');
+  }
+}

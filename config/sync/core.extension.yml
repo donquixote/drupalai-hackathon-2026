@@ -14,6 +14,7 @@ module:
   breakpoint: 0
   canvas: 0
   canvas_ai: 0
+  canvas_validator: 0
   captcha: 0
   ckeditor5: 0
   coffee: 0
