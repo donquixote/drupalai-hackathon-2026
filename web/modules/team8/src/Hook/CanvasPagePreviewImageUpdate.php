@@ -21,6 +21,7 @@ class CanvasPagePreviewImageUpdate {
     $image = File::create();
     $image->setFileUri('core/misc/druplicon.png');
     $image->setFilename(basename($image->getFileUri()));
+    $image->setMimeType('image/png');
     $image->save();
 
     $page->set('preview_image', $image);
