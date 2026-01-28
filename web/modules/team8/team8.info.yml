@@ -3,3 +3,6 @@ type: module
 description: 'hackathon challenge solutions'
 package: Custom
 core_version_requirement: ^10 || ^11
+
+dependencies:
+  - canvas:canvas
