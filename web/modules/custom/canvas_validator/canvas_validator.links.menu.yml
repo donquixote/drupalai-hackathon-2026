@@ -1,0 +1,6 @@
+canvas_validator.settings:
+  title: 'Canvas AI Validator'
+  description: 'Configure AI model and prompt for Canvas validation.'
+  parent: system.admin_config
+  route_name: canvas_validator.settings_form
+  weight: 20

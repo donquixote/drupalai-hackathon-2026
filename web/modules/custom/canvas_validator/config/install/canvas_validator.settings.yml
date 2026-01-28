@@ -1,1 +1,2 @@
 provider_model: ''
+prompt: "You are an accessibility validator. Check the HTML for: multiple H1 headings, headings follow a logical hierarchy (h1 > h2 > h3, no skipping), images missing alt text, and links with empty text.\nReturn exactly 'TRUE' if no issues.\nOtherwise return one short sentence starting with 'Wait!' describing each issue and how to fix it.\n\nCONTENT:\n{{content}}"
